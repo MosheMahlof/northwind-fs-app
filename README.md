@@ -31,7 +31,7 @@ The backend stack includes:
 - **.NET 6 Web API**
 - **MSSQL Server** running in a **Docker container**
 - **SQL script** to initialize the database schema and define all required **stored procedures**
-
+- access swagger: http://localhost:5234/swagger
 ## 📝 Bonus & Design Decisions
 
 - Chose React + Context over Redux due to small app scope
@@ -41,6 +41,9 @@ The backend stack includes:
 ---
 
 ## 🚀 Getting Started
+
+clone the repository: `git clone https://github.com/MosheMahlof/northwind-fs-app.git`
+
 # frontend:
 1. `cd northwind-products`
 2. `npm install`

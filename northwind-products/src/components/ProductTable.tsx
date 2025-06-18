@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -10,9 +10,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { ConfirmDialog } from "./ConfirmDialog";
 import type { Product } from "../types";
-import { UIContext } from "../context/UIContext";
 
 interface ProductTableProps {
   products: Product[];
@@ -25,47 +23,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [deleteId, setDeleteId] = useState<number | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const { showToast } = useContext(UIContext);
-
-  const handleDeleteClick = (id: number) => {
-    setDeleteId(id);
-    setDialogOpen(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (deleteId === null) return;
-    try {
-      await onDelete(deleteId);
-      showToast("Product deleted successfully.", "success");
-    } catch (error: unknown) {
-      let message = "Delete failed.";
-      if (typeof error === "object" && error !== null) {
-        const err = error as {
-          response?: { data?: unknown };
-          message?: string;
-        };
-        if (err.response?.data) {
-          message =
-            typeof err.response.data === "string"
-              ? err.response.data
-              : typeof err.response.data === "object" &&
-                err.response.data !== null &&
-                "message" in err.response.data
-              ? (err.response.data as { message?: string }).message || message
-              : message;
-        } else if (err.message) {
-          message = err.message;
-        }
-      }
-      showToast(message, "error");
-    } finally {
-      setDialogOpen(false);
-      setDeleteId(null);
-    }
-  };
-
   return (
     <Box>
       <Box sx={{ maxHeight: 385, overflowY: "auto", width: "100%" }}>
@@ -93,7 +50,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                     <EditIcon fontSize="small" color="primary" />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleDeleteClick(product.productId)}
+                    onClick={() => onDelete(product.productId)}
                     size="small"
                     color="error"
                   >
@@ -105,16 +62,6 @@ export const ProductTable: React.FC<ProductTableProps> = ({
           </TableBody>
         </Table>
       </Box>
-      <ConfirmDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Delete Product"
-        description="Are you sure you want to delete this product? This action cannot be undone."
-        confirmText="Delete"
-        cancelText="Cancel"
-        color="error"
-      />
     </Box>
   );
 };

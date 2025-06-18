@@ -7,18 +7,63 @@ import { ProductTable } from "../components/ProductTable";
 import type { CustomerOrderCount } from "../types";
 import { ProductList } from "../components/ProductList ";
 import { useUIContext } from "../context/UIContext";
+import { ConfirmDialog } from "../components/ConfirmDialog";
 
 export const HomePage = () => {
+  const navigate = useNavigate();
+  const { isMobile, showToast } = useUIContext();
   const { products, deleteProduct, getTopCustomers } = useDataContext();
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate();
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [topCustomers, setTopCustomers] = useState<CustomerOrderCount[]>([]);
-  const { isMobile } = useUIContext();
   React.useEffect(() => {
     getTopCustomers().then((data) => {
       setTopCustomers(data.slice(0, 3));
     });
   }, [getTopCustomers]);
+
+  const handleDeleteClick = (id: number) => {
+    setDeleteId(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCancelDeleteClick = () => {
+    setDeleteDialogOpen(false);
+    setDeleteId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteId === null) return;
+    try {
+      await deleteProduct(deleteId);
+      showToast("Product deleted successfully.", "success");
+    } catch (error: unknown) {
+      let message = "Delete failed.";
+      if (typeof error === "object" && error !== null) {
+        const err = error as {
+          response?: { data?: unknown };
+          message?: string;
+        };
+        if (err.response?.data) {
+          message =
+            typeof err.response.data === "string"
+              ? err.response.data
+              : typeof err.response.data === "object" &&
+                err.response.data !== null &&
+                "message" in err.response.data
+              ? (err.response.data as { message?: string }).message || message
+              : message;
+        } else if (err.message) {
+          message = err.message;
+        }
+      }
+      showToast(message, "error");
+    } finally {
+      setDeleteDialogOpen(false);
+      setDeleteId(null);
+    }
+  };
 
   // Filter products by name or category
   const filteredProducts = useMemo(() => {
@@ -81,15 +126,26 @@ export const HomePage = () => {
         <ProductList
           products={filteredProducts}
           onEdit={(product) => navigate(`/products/${product.productId}/edit`)}
-          onDelete={deleteProduct}
+          onDelete={handleDeleteClick}
         />
       ) : (
         <ProductTable
           products={filteredProducts}
           onEdit={(product) => navigate(`/products/${product.productId}/edit`)}
-          onDelete={deleteProduct}
+          onDelete={handleDeleteClick}
         />
       )}
+
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onClose={handleCancelDeleteClick}
+        onConfirm={handleConfirmDelete}
+        title="Delete Product"
+        description="Are you sure you want to delete this product? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        color="error"
+      />
     </Box>
   );
 };

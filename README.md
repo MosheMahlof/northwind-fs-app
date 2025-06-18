@@ -18,6 +18,8 @@ The frontend is built using:
 > ⚠️ Didnt use ADO .net/entity framwork:
 > - Time constraints
 
+> ⚠️ Custom hooks to seperate logic from html:
+> - Time constraints
 📌 Refer to `frontend/README.md` for setup and usage instructions.
 
 ---
@@ -33,18 +35,6 @@ The backend stack includes:
 
 📌 Refer to `backend/README.md` for instructions on building and running the backend services (including Docker setup).
 
----
-
-## ⚙️ Additional Features & Notes
-
-- Error handling and logging implemented on both frontend and backend
-- SQL scripts ensure clean DB setup and referential integrity
-- Fulfills fullstack requirements for:
-  - Product list view with sorting/filtering
-  - Autocomplete search built from scratch (no external libs)
-  - Product create/edit/delete functionality with validation and error feedback
-
----
 
 ## 📝 Bonus & Design Decisions
 

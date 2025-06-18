@@ -18,7 +18,6 @@ export const ProductList: React.FC<ProductListProps> = ({
   onDelete,
 }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
-
   const handleExpand = (id: number) => {
     setExpandedId(expandedId === id ? null : id);
   };
@@ -90,10 +89,8 @@ export const ProductList: React.FC<ProductListProps> = ({
                   <EditIcon color="primary" />
                 </IconButton>
                 <IconButton
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onDelete(product.productId);
-                  }}
+                  onClick={() => onDelete(product.productId)}
+                  size="small"
                   color="error"
                 >
                   <DeleteIcon color="secondary" />

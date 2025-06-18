@@ -16,7 +16,6 @@ interface UIContextType {
     message: string,
     severity?: "success" | "error" | "info" | "warning"
   ) => void;
-  setSpinner: (active: boolean) => void;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
   isMobile: boolean;
@@ -24,7 +23,6 @@ interface UIContextType {
 
 export const UIContext = createContext<UIContextType>({
   showToast: () => {},
-  setSpinner: () => {},
   isDarkMode: false,
   toggleDarkMode: () => {},
   isMobile: false,
@@ -42,7 +40,6 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
     message: "",
     severity: "info",
   });
-  const [spinner, setSpinnerState] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     return saved ? JSON.parse(saved) : false;
@@ -54,10 +51,6 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
     severity: "success" | "error" | "info" | "warning" = "info"
   ) => {
     setToast({ open: true, message, severity });
-  };
-
-  const setSpinner = (active: boolean) => {
-    setSpinnerState(active);
   };
 
   const toggleDarkMode = () => {
@@ -152,7 +145,7 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <UIContext.Provider
-      value={{ showToast, setSpinner, isDarkMode, toggleDarkMode, isMobile }}
+      value={{ showToast, isDarkMode, toggleDarkMode, isMobile }}
     >
       <ThemeProvider theme={theme}>
         <CssBaseline />
@@ -171,12 +164,6 @@ export const UIProvider = ({ children }: { children: ReactNode }) => {
             {toast.message}
           </Alert>
         </Snackbar>
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 999 }}
-          open={spinner}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
       </ThemeProvider>
     </UIContext.Provider>
   );

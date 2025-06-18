@@ -31,36 +31,29 @@ The backend stack includes:
 - **.NET 6 Web API**
 - **MSSQL Server** running in a **Docker container**
 - **SQL script** to initialize the database schema and define all required **stored procedures**
-- Data access using **ADO.NET** and **stored procedures**
-
-📌 Refer to `backend/README.md` for instructions on building and running the backend services (including Docker setup).
-
 
 ## 📝 Bonus & Design Decisions
 
 - Chose React + Context over Redux due to small app scope
-- Used Material UI for speed and consistent design
-- Dark mode, CSV/PDF export, and localStorage form persistence were considered, but deprioritized due to time constraints
+- Used Material UI, known ui library with good documentation
+- Dark, localStorage form persistence and swagger were completed
 
 ---
 
 ## 🚀 Getting Started
+# frontend:
+1. `cd northwind-products`
+2. `npm install`
+3. `npm run dev`
 
-For full setup and run instructions, please refer to:
+# backend:
+1. run docker desktop application
+2. `cd Northwind.API`
+3. `docker-compose up -d`
+4. `docker exec -it northwind-sqlserver bash`
+5. `/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -C -i /init/01-init-northwind.sql` (this setup the DB and stored procedures)
+6. `dotnet run`
+```
 
-- [`frontend/README.md`](./frontend/README.md)
-- [`backend/README.md`](./backend/README.md)
 
 ---
-
-## ✅ Assignment Goals Recap
-
-✔️ Fullstack CRUD  
-✔️ Stored procedures for all DB operations  
-✔️ Dockerized MSSQL setup  
-✔️ Responsive UI with custom autocomplete  
-✔️ Error handling and user-friendly feedback
-
----
-
-Happy coding! ✨

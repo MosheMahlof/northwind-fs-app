@@ -15,6 +15,9 @@ The frontend is built using:
 > - Styling is handled via component props and theming
 > - Time constraints and project scope did not justify custom CSS
 
+> ⚠️ Didnt use ADO .net/entity framwork:
+> - Time constraints
+
 📌 Refer to `frontend/README.md` for setup and usage instructions.
 
 ---

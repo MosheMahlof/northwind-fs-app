@@ -4,35 +4,30 @@ A fullstack CRUD application for managing products in the Northwind database.
 
 ## Prerequisites
 
-- Docker and Docker Compose
+- Docker desktop and Docker Compose
 - .NET 6 SDK
 - Git
 
 ## Setup Instructions
 
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd Northwind.API
-```
-
 2. Start the SQL Server container:
 
 ```bash
+run docker desktop
 docker-compose up -d
 ```
 
 3. Run the database initialization script (this will also create the stored procedures):
 
 ```bash
-docker exec -it northwind-sqlserver bash - login to the container
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -C -i /init/01-init-northwind.sql - run the script that creates the DB and populates it
+docker exec -it northwind-sqlserver bash
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -C -i /init/01-init-northwind.sql 
 ```
 
 4. Run the .NET application:
 
 ```bash
+cd Northwind.API
 dotnet run
 ```
 

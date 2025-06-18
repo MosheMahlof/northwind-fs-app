@@ -103,16 +103,6 @@ export const ProductList: React.FC<ProductListProps> = ({
           </Collapse>
         </Paper>
       ))}
-      <ConfirmDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        onConfirm={handleConfirmDelete}
-        title="Delete Product"
-        description="Are you sure you want to delete this product? This action cannot be undone."
-        confirmText="Delete"
-        cancelText="Cancel"
-        color="error"
-      />
     </Box>
   );
 };
